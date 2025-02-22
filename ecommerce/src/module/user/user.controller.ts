@@ -1,56 +1,44 @@
 import { Request, Response } from 'express'
-import type { User } from './user.d'
+import { getAll, getById, save, update, remove } from './user.repository'
 
-const users: User[] = []
-
-const getUser = (req: Request, res: Response) => {
+const getUser = async (req: Request, res: Response) => {
   // TODO pentelhar o Vitor sobre query parameter
+  const result = await getAll()
+
   res.json({
-    data: users
+    data: result
   })
 }
 
-const getUserById = (req: Request, res: Response) => {
-  const user = users.find(user => user.id === parseInt(req.params.id, 10))
+const getUserById = async (req: Request, res: Response) => {
+  const result = await getById(req.params.id)
 
   res.json({
-    data: user
+    data: result
   })
 }
 
-const createUser = (req: Request, res: Response) => {
-  users.push(req.body)
+const createUser = async (req: Request, res: Response) => {
+  const result = await save(req.body)
 
   res.json({
-    data: users
+    data: result
   })
 }
 
-const updateUser = (req: Request, res: Response) => {
-  for (let index = 0; index < users.length; index++) {
-    const user = users[index]
-    if (user.id === parseInt(req.params.id, 10)) {
-      users[index] = {
-        ...users[index],
-        ...req.body
-      }
-    }
-  }
+const updateUser = async (req: Request, res: Response) => {
+  const result = await update(req.params.id, req.body)
 
   res.json({
-    data: users
+    data: result
   })
 }
 
-const deleteUser = (req: Request, res: Response) => {
-  for (let index = 0; index < users.length; index++) {
-    const user = users[index];
-    if (user.id === Number(req.params.id)) {
-      users.splice(index, 1)
-    }
-  }
+const deleteUser = async (req: Request, res: Response) => {
+  const result = await remove(req.params.id)
+
   res.json({
-    data: users
+    data: result
   })
 }
 
