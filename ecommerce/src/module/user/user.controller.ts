@@ -11,17 +11,23 @@ const getUser = async (req: Request, res: Response) => {
 }
 
 const getUserById = async (req: Request, res: Response) => {
-  const result = await getById(req.params.id)
+  try {
+    const result = await getById(req.params.id)
 
-  res.json({
-    data: result
-  })
+    res.json({
+      data: result
+    })
+  } catch (error) {
+    res.status(500).json({
+      error
+    })
+  }
 }
 
 const createUser = async (req: Request, res: Response) => {
   const result = await save(req.body)
 
-  res.json({
+  res.status(201).json({
     data: result
   })
 }

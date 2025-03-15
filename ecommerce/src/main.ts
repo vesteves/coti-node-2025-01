@@ -1,11 +1,13 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import userRouter from './module/user/user.router'
+import authRouter from './module/auth/auth.router'
 const app = express()
 
 app.use(express.json())
 
 app.use('/users', userRouter)
+app.use('/auth', authRouter)
 
 app.listen(8000, async () => {
   try {
