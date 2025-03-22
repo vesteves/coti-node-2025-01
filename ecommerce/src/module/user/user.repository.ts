@@ -3,15 +3,15 @@ import { userModel } from './user.model'
 import bcrypt from 'bcrypt'
 
 export const getAll = async () => {
-  return await userModel.find().exec()
+  return await userModel.find().lean().exec()
 }
 
 export const getById = async (_id: string) => {
-  return await userModel.findById(_id).exec()
+  return await userModel.findById(_id).lean().exec()
 }
 
 export const getByEmail = async (email: string) => {
-  return await userModel.findOne({ email }).exec()
+  return await userModel.findOne({ email }).lean().exec()
 }
 
 export const save = async (user: User) => {
@@ -25,9 +25,9 @@ export const update = async (_id: string, user: User) => {
     _id
   }, {
     ...user
-  }).exec()
+  }).lean().exec()
 }
 
 export const remove = async (_id: string) => {
-  return await userModel.deleteOne({ _id }).exec()
+  return await userModel.deleteOne({ _id }).lean().exec()
 }

@@ -18,6 +18,7 @@ const getUserById = async (req: Request, res: Response) => {
       data: result
     })
   } catch (error) {
+    console.error(`Usuário ${res.locals.user._id} não conseguiu listar usuário em ${new Date().toDateString()}`)
     res.status(500).json({
       error
     })

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
 import { getByEmail } from '../user/user.repository'
 
 const login = async (req: Request, res: Response) => {
@@ -8,7 +9,7 @@ const login = async (req: Request, res: Response) => {
   // caso não, retornar uma mensagem para o cliente
   if (!user) {
     res.status(404).json({
-      msg: 'Usuário não encontrado'
+      msg: 'Erro no usuário ou senha'
     })
 
     return
@@ -18,17 +19,30 @@ const login = async (req: Request, res: Response) => {
 
   if (!result) {
     res.status(401).json({
-      msg: 'A senha está errada'
+      msg: 'Erro no usuário ou senha'
     })
 
     return
   }
 
+  // TODO entregar o token válido para meu clienteyar
+  console.log('JWT_SECRET', process.env.JWT_SECRET)
+  const token = jwt.sign(user._id.toString(), process.env.JWT_SECRET || '')
+
+  // Bearer Token
   res.json({
-    data: 'Usuário encontrado e pronto para se autenticar'
+    token: `Bearer ${token}`
+  })
+}
+
+const me = async (_: Request, res: Response) => {
+  res.json({
+    _id: res.locals.user._id,
+    email: res.locals.user.email
   })
 }
 
 export default {
   login,
+  me,
 }
