@@ -11,6 +11,9 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
   }
 
   try {
+    // req.body = corpo da requisicao
+    // req.params = parametros da requisição
+    // req.headers = cabeçalho da requisição
     const userId = jwt.verify(req.headers.authorization.replace('Bearer ', ''), process.env.JWT_SECRET || '')
 
     const user = await getById(userId as string)

@@ -1,4 +1,4 @@
-import type { User } from './user.d'
+import type { CreateUser, UpdateUser } from './user.d'
 import { userModel } from './user.model'
 import bcrypt from 'bcrypt'
 
@@ -14,13 +14,17 @@ export const getByEmail = async (email: string) => {
   return await userModel.findOne({ email }).lean().exec()
 }
 
-export const save = async (user: User) => {
+export const save = async (user: CreateUser) => {
   user.password = await bcrypt.hash(user.password, await bcrypt.genSalt())
 
   return await userModel.create(user)
 }
 
-export const update = async (_id: string, user: User) => {
+export const update = async (_id: string, user: UpdateUser) => {
+  if (user.password) {
+    user.password = await bcrypt.hash(user.password, await bcrypt.genSalt())
+  }
+
   return await userModel.updateOne({
     _id
   }, {

@@ -18,7 +18,6 @@ const getUserById = async (req: Request, res: Response) => {
       data: result
     })
   } catch (error) {
-    console.error(`Usuário ${res.locals.user._id} não conseguiu listar usuário em ${new Date().toDateString()}`)
     res.status(500).json({
       error
     })
@@ -26,7 +25,7 @@ const getUserById = async (req: Request, res: Response) => {
 }
 
 const createUser = async (req: Request, res: Response) => {
-  const result = await save(req.body)
+  const result = await save(res.locals.validated)
 
   res.status(201).json({
     data: result
@@ -34,7 +33,9 @@ const createUser = async (req: Request, res: Response) => {
 }
 
 const updateUser = async (req: Request, res: Response) => {
-  const result = await update(req.params.id, req.body)
+  const result = await update(req.params.id, res.locals.validated)
+
+  console.warn(`Usuário ${res.locals.user._id} atualizou as informações do usuário ${req.params.id} em ${new Date().toDateString()}`, req.body)
 
   res.json({
     data: result

@@ -8,7 +8,7 @@ const login = async (req: Request, res: Response) => {
   const user = await getByEmail(req.body.email)
   // caso não, retornar uma mensagem para o cliente
   if (!user) {
-    res.status(404).json({
+    res.status(401).json({
       msg: 'Erro no usuário ou senha'
     })
 
@@ -25,8 +25,7 @@ const login = async (req: Request, res: Response) => {
     return
   }
 
-  // TODO entregar o token válido para meu clienteyar
-  console.log('JWT_SECRET', process.env.JWT_SECRET)
+  // TODO entregar o token válido para meu cliente
   const token = jwt.sign(user._id.toString(), process.env.JWT_SECRET || '')
 
   // Bearer Token
